@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Settings | Renovation Tracker</title>
+  <style>
+    /* Core Reset & Layout */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html, body { height:100%; display:flex; flex-direction:column; font-family:Arial, sans-serif; background:#f5f5f5; }
+    body { min-height:100vh; }
+    main { flex:1; max-width:900px; margin:2rem auto; padding:0 1rem; }
+
+    /* Navbar */
+    .navbar { display:flex; justify-content:space-between; align-items:center; background:#2c3e50; color:#fff; padding:1rem 2rem; position:sticky; top:0; z-index:1000; }
+    .nav-toggle { display:none; }
+    .nav-menu a { color:#fff; text-decoration:none; padding:.5rem 1rem; border-radius:4px; }
+    .nav-menu a:hover, .nav-menu a.active { background:#34495e; }
+    @media(max-width:768px) {
+      .nav-toggle { display:block; }
+      .nav-menu { display:none; flex-direction:column; position:absolute; top:60px; left:0; right:0; background:#2c3e50; }
+      .nav-menu.active { display:flex; }
+    }
+
+    /* Settings Header */
+    h1 { margin-bottom:1rem; color:#333; }
+
+    /* Form Layout */
+    .settings-grid { display:grid; grid-template-columns:1fr 1fr; gap:2rem; margin-bottom:2rem; }
+    .panel { background:#fff; padding:1.5rem; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
+    .panel h2 { font-size:1.2rem; margin-bottom:1rem; color:#2c3e50; }
+
+    .panel label { display:block; margin:0.8rem 0 0.3rem; font-weight:500; color:#444; }
+    .panel input[type="text"], .panel input[type="email"], .panel input[type="password"], .panel select {
+      width:100%; padding:0.6rem; border:1px solid #ccc; border-radius:4px;
+    }
+    .panel input[type="checkbox"] { transform:scale(1.2); margin-right:0.5rem; vertical-align:middle; }
+
+    .panel button { margin-top:1rem; background:#2c3e50; color:#fff; padding:0.6rem 1.2rem; border:none; border-radius:4px; cursor:pointer; }
+    .panel button:hover { background:#1e2a38; }
+
+    .toggle-group { display:flex; justify-content:space-between; align-items:center; margin:0.8rem 0; }
+
+    /* Footer */
+    .footer { background:#2c3e50; color:#fff; padding:2rem; flex-shrink:0; }
+    .footer-content { display:flex; flex-wrap:wrap; gap:1rem; justify-content:space-between; }
+    .footer-bottom { margin-top:1rem; text-align:center; font-size:0.9rem; border-top:1px solid #7f8c8d; padding-top:1rem; }
+
+    @media(max-width:768px) { .settings-grid { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="brand">Renovation Tracker</div>
+    <button class="nav-toggle">☰</button>
+    <nav class="nav-menu">
+      <a href="index.html">Dashboard</a>
+      <a href="projects.html">Projects</a>
+      <a href="tasks.html">Tasks</a>
+      <a href="budget.html">Budget</a>
+      <a href="inventory.html">Inventory</a>
+      <a href="contractors.html">Contractors</a>
+      <a href="inspiration.html">Inspiration</a>
+      <a href="settings.html" class="active">Settings</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Settings</h1>
+    <div class="settings-grid">
+      <!-- Profile -->
+      <div class="panel">
+        <h2>Profile</h2>
+        <label for="displayName">Display Name</label>
+        <input id="displayName" type="text" placeholder="John Doe">
+        <label for="email">Email Address</label>
+        <input id="email" type="email" placeholder="john@example.com">
+        <label for="password">New Password</label>
+        <input id="password" type="password" placeholder="••••••••">
+        <button id="saveProfile">Save Profile</button>
+      </div>
+
+      <!-- Preferences -->
+      <div class="panel">
+        <h2>Preferences</h2>
+        <label for="currency">Preferred Currency</label>
+        <select id="currency">
+          <option value="INR">₹ – INR</option>
+          <option value="USD">$ – USD</option>
+          <option value="EUR">€ – EUR</option>
+        </select>
+        <label for="timezone">Timezone</label>
+        <select id="timezone">
+          <option>Asia/Kolkata</option>
+          <option>UTC</option>
+          <option>America/New_York</option>
+        </select>
+        <button id="savePreferences">Save Preferences</button>
+      </div>
+    </div>
+
+    <!-- Notifications -->
+    <div class="panel">
+      <h2>Notifications</h2>
+      <div class="toggle-group">
+        <label for="emailNotif">Email Notifications</label>
+        <input id="emailNotif" type="checkbox">
+      </div>
+      <div class="toggle-group">
+        <label for="smsNotif">Send SMS Alerts</label>
+        <input id="smsNotif" type="checkbox">
+      </div>
+      <div class="toggle-group">
+        <label for="reminderNotif">Task Reminders</label>
+        <input id="reminderNotif" type="checkbox">
+      </div>
+      <button id="saveNotifications">Save Notifications</button>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section about"><h3>About</h3><p>Manage your profile and preferences.</p></div>
+      <div class="footer-section contact"><h3>Contact</h3><p>Singānallūr, TN<br>+91 98765 43210<br><a href="mailto:support@renovationtracker.app">support@renovationtracker.app</a></p></div>
+      <div class="footer-section social"><h3>Follow Us</h3><p>📘 🐦 📷</p></div>
+    </div>
+    <div class="footer-bottom">© 2025 Renovation Tracker. All rights reserved.</div>
+  </footer>
+
+  <script>
+    // DOM refs
+    const fields = {
+      displayName: document.getElementById('displayName'),
+      email: document.getElementById('email'),
+      password: document.getElementById('password'),
+      currency: document.getElementById('currency'),
+      timezone: document.getElementById('timezone'),
+      emailNotif: document.getElementById('emailNotif'),
+      smsNotif: document.getElementById('smsNotif'),
+      reminderNotif: document.getElementById('reminderNotif'),
+    };
+
+    // Load from localStorage
+    function loadSettings() {
+      const data = JSON.parse(localStorage.getItem('settings')) || {};
+      Object.keys(fields).forEach(key => {
+        if (key in data) {
+          if (fields[key].type === 'checkbox') {
+            fields[key].checked = data[key];
+          } else {
+            fields[key].value = data[key];
+          }
+        }
+      });
+    }
+
+    // Save to localStorage
+    function saveSettings() {
+      const data = {};
+      Object.keys(fields).forEach(key => {
+        if (fields[key].type === 'checkbox') {
+          data[key] = fields[key].checked;
+        } else {
+          data[key] = fields[key].value;
+        }
+      });
+      localStorage.setItem('settings', JSON.stringify(data)); // Uses JSON stringify :contentReference[oaicite:1]{index=1}
+      alert('Settings saved!');
+    }
+
+    // Wire up buttons
+    document.getElementById('saveProfile').onclick = saveSettings;
+    document.getElementById('savePreferences').onclick = saveSettings;
+    document.getElementById('saveNotifications').onclick = saveSettings;
+
+    // Initialize
+    window.addEventListener('DOMContentLoaded', loadSettings);
+
+    // Navbar toggle for mobile
+    document.querySelector('.nav-toggle')?.addEventListener('click', () => {
+      document.querySelector('.nav-menu').classList.toggle('active');
+    });
+  </script>
+</body>
+</html>
