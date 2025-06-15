@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard | Renovation Tracker</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f9fbff;
+      color: #2c3e50;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+       nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background-color: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #00b894;
+    }
+
+    .brand .logo-img {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-right: 0.6rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 25px;
+    }
+
+    .nav-links a {
+      color: #00b894;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: #007bff;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+
+    .hamburger div {
+      width: 25px;
+      height: 3px;
+      background-color: #00b894;
+      margin: 4px 0;
+      transition: 0.4s;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background-color: white;
+        position: absolute;
+        top: 70px;
+        left: 0;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+      }
+
+      .nav-links.show {
+        display: flex;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+    }
+    main {
+      padding: 2rem;
+      flex: 1;
+    }
+
+    .top-cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      align-items: stretch;
+    }
+
+    .card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 16px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+      flex: 1;
+      min-width: 250px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card h2 {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #34495e;
+    }
+
+    .date-circle {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: #3498db;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-size: 1rem;
+      font-weight: bold;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .date-circle span {
+      font-size: 1.6rem;
+      font-weight: bold;
+    }
+
+    #budgetText {
+      background: linear-gradient(to right, #2ecc71, #27ae60);
+      padding: 1rem;
+      border-radius: 10px;
+      color: white;
+      font-weight: 600;
+      line-height: 1.6;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    li {
+      margin-bottom: 0.6rem;
+      font-size: 0.95rem;
+    }
+
+    .inventory-pill {
+      display: inline-block;
+      background: #ecf0f1;
+      color: #2c3e50;
+      padding: 6px 12px;
+      margin: 5px 5px 0 0;
+      border-radius: 20px;
+      font-size: 0.9rem;
+    }
+
+    .progress-section {
+      margin-top: 2rem;
+    }
+
+    .projects-scroll {
+      display: flex;
+      overflow-x: auto;
+      gap: 1rem;
+      padding: 1rem 0;
+    }
+
+    .project-card {
+      min-width: 220px;
+      background: #ffffff;
+      padding: 1rem;
+      border-radius: 15px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      flex-shrink: 0;
+      text-align: center;
+    }
+
+    .project-card h3 {
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+      color: #34495e;
+    }
+
+    .progress-bar {
+      background: #ecf0f1;
+      height: 10px;
+      border-radius: 6px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .progress-bar-inner {
+      height: 10px;
+      background: #27ae60;
+      width: 0;
+      border-radius: 6px;
+      transition: width 0.4s ease;
+    }
+
+    footer {
+      background-color: #00b894;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+      font-size: 0.95rem;
+      margin-top: auto;
+    }
+
+    @media (max-width: 768px) {
+      .nav-menu {
+        flex-direction: column;
+        align-items: flex-end;
+      }
+
+      .projects-scroll {
+        flex-direction: column;
+        overflow-x: visible;
+      }
+
+      .top-cards {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ✅ Navbar -->
+  <nav>
+    <div class="brand">
+      <img src="https://i.pinimg.com/736x/74/82/b0/7482b05190c9d18b603d4e2e43553321.jpg" alt="Logo" class="logo-img" />
+      Renovation Tracker
+    </div>
+
+    <div class="hamburger" id="hamburger">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="projects.html">Projects</a>
+      <a href="tasks.html">Tasks</a>
+      <a href="budget.html">Budget</a>
+      <a href="inventory.html">Inventory</a>
+      <a href="inspiration.html">Inspiration</a>
+      <a href="contractor.html">Contractor Details</a>
+    </div>
+  </nav>
+
+<main>
+  <div class="top-cards">
+    <div class="date-circle">
+      <span id="dayNum"></span>
+      <small id="monthName"></small>
+    </div>
+
+    <div class="card">
+      <h2><i class="fas fa-tasks"></i> Tasks for Today</h2>
+      <ul id="taskList"></ul>
+    </div>
+
+    <div class="card">
+      <h2><i class="fas fa-wallet"></i> Budget Summary</h2>
+      <div id="budgetText"></div>
+    </div>
+
+    <div class="card">
+      <h2><i class="fas fa-boxes"></i> Inventory</h2>
+      <div id="inventoryList"></div>
+    </div>
+  </div>
+
+  <div class="progress-section">
+    <h2>📈 Project Progress</h2>
+    <div class="projects-scroll" id="projectsContainer"></div>
+  </div>
+</main>
+
+  <footer>
+    &copy; 2025 Renovation Tracker | Designed to Inspire Your Perfect Home ✨
+  </footer>
+<script>
+  const now = new Date();
+  const day = now.getDate();
+  const month = now.toLocaleString('default', { month: 'short' });
+  document.getElementById("dayNum").textContent = day;
+  document.getElementById("monthName").textContent = month;
+
+  const today = now.toISOString().split("T")[0];
+  const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+  const todayTasks = tasks.filter(task => task.date === today);
+  const taskListEl = document.getElementById("taskList");
+
+  if (todayTasks.length === 0) {
+    taskListEl.innerHTML = "<li>No tasks for today.</li>";
+  } else {
+    todayTasks.forEach((task, index) => {
+      const li = document.createElement("li");
+      li.innerHTML = `<input type="checkbox" id="task-${index}" />
+                      <label for="task-${index}">${task.desc || 'Untitled Task'}</label>`;
+      li.querySelector("input").addEventListener("change", () => {
+        li.style.textDecoration = "line-through";
+        setTimeout(() => li.remove(), 400);
+        const remaining = tasks.filter(t => !(t.title === task.title && t.date === task.date));
+        localStorage.setItem("tasks", JSON.stringify(remaining));
+      });
+      taskListEl.appendChild(li);
+    });
+  }
+
+  const transactions = JSON.parse(localStorage.getItem("budgetEntries") || "[]");
+  let income = 0, expenses = 0;
+  transactions.forEach(tx => {
+    if (tx.type === "income") income += tx.amount;
+    else expenses += tx.amount;
+  });
+  const balance = income - expenses;
+  document.getElementById("budgetText").innerHTML = `
+    Income: ₹${income}<br>
+    Expenses: ₹${expenses}<br>
+    Balance: ₹${balance}
+  `;
+
+  const inventory = JSON.parse(localStorage.getItem("smartInventory") || "[]");
+  const inventoryList = document.getElementById("inventoryList");
+  const inStockItems = inventory.filter(item => item.qty > 0);
+  inventoryList.innerHTML = inStockItems.length
+    ? inStockItems.map(item => `<span class="inventory-pill">${item.name} – ${item.qty}</span>`).join("")
+    : "<p>No items in stock.</p>";
+
+  const dbURL = 'https://renovation-tracker-25dce-default-rtdb.firebaseio.com/projects.json';
+  const container = document.getElementById('projectsContainer');
+
+  async function loadProjects() {
+    try {
+      const res = await fetch(dbURL);
+      const data = await res.json() || {};
+      const metaData = JSON.parse(localStorage.getItem('projMeta') || '{}');
+      container.innerHTML = '';
+
+      Object.entries(data).forEach(([id, proj]) => {
+        const meta = metaData[id] || {};
+        const progress = meta.progress || 0;
+
+        const card = document.createElement('div');
+        card.className = 'project-card';
+        card.innerHTML = `
+          <h3>${meta.title || proj.title}</h3>
+          <div class="progress-bar">
+            <div class="progress-bar-inner" style="width:${progress}%"></div>
+          </div>
+          <small>${progress}% Complete</small>
+        `;
+        container.appendChild(card);
+      });
+    } catch (err) {
+      container.innerHTML = "<p>Error loading projects</p>";
+      console.error("Error fetching projects:", err);
+    }
+  }
+  // Hamburger menu toggle
+  document.getElementById('hamburger').addEventListener('click', () => {
+    document.getElementById('navLinks').classList.toggle('show');
+  });
+  loadProjects();
+</script>
+
+</body>
+</html>

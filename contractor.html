@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contractors | Renovation Tracker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <style>
+    * { box-sizing: border-box; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; }
+    body { background: #ecf0f1; display: flex; flex-direction: column; min-height: 100vh; }
+       nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background-color: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #00b894;
+    }
+
+    .brand .logo-img {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-right: 0.6rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 25px;
+    }
+
+    .nav-links a {
+      color: #00b894;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: #007bff;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+
+    .hamburger div {
+      width: 25px;
+      height: 3px;
+      background-color: #00b894;
+      margin: 4px 0;
+      transition: 0.4s;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background-color: white;
+        position: absolute;
+        top: 70px;
+        left: 0;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+      }
+
+      .nav-links.show {
+        display: flex;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+    }
+    main { flex: 1; padding: 2rem; max-width: 1200px; margin: auto; }
+    h1 { text-align: center; color: #2d3436; margin-bottom: 2rem; }
+    .form-container {
+      background: #fff;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      margin-bottom: 2rem;
+    }
+    .form-container form {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+    }
+    .form-container input, .form-container textarea {
+      padding: 0.8rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+    .form-container button {
+      grid-column: span 2;
+      padding: 0.8rem;
+      border: none;
+      background: #00cec9;
+      color: #fff;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .form-container button:hover {
+      background: #00b894;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .visiting-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 1rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      transition: transform 0.2s ease;
+    }
+    .visiting-card:hover { transform: translateY(-4px); }
+    .visiting-card h3 { color: #0984e3; margin-bottom: 0.2rem; }
+    .visiting-card p { color: #636e72; font-size: 0.95rem; }
+    footer {
+      background-color: #00b894;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+      font-size: 0.95rem;
+      margin-top: auto;
+    }
+  </style>
+</head>
+<body>
+  <!-- ✅ Navbar -->
+  <nav>
+    <div class="brand">
+      <img src="https://i.pinimg.com/736x/74/82/b0/7482b05190c9d18b603d4e2e43553321.jpg" alt="Logo" class="logo-img" />
+      Renovation Tracker
+    </div>
+
+    <div class="hamburger" id="hamburger">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="projects.html">Projects</a>
+      <a href="tasks.html">Tasks</a>
+      <a href="budget.html">Budget</a>
+      <a href="inventory.html">Inventory</a>
+      <a href="inspiration.html">Inspiration</a>
+      <a href="contractor.html">Contractor Details</a>
+    </div>
+  </nav>
+  <main>
+    <h1>Contractor Directory</h1>
+    <div class="form-container">
+      <form id="contractorForm">
+        <input type="text" id="name" placeholder="Contractor Name" required />
+        <input type="text" id="phone" placeholder="Phone Number" required />
+        <input type="email" id="email" placeholder="Email Address" required />
+        <textarea id="pastProjects" placeholder="Past Project Details"></textarea>
+        <button type="submit">Add Contractor</button>
+      </form>
+    </div>
+    <div class="card-grid" id="contractorList"></div>
+  </main>
+  <footer>
+    &copy; 2025 Renovation Tracker | Designed to Inspire Your Perfect Home ✨
+  </footer>
+<script>
+  const form = document.getElementById('contractorForm');
+  const contractorList = document.getElementById('contractorList');
+
+  let contractors = JSON.parse(localStorage.getItem('contractors')) || [];
+
+  function saveToLocalStorage() {
+    localStorage.setItem('contractors', JSON.stringify(contractors));
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById('name').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const pastProjects = document.getElementById('pastProjects').value.trim();
+
+    if (!name || !phone || !email) return;
+
+    const contractor = { name, phone, email, pastProjects };
+    contractors.push(contractor);
+    saveToLocalStorage();
+    renderContractors();
+    form.reset();
+  });
+
+  function renderContractors() {
+    contractorList.innerHTML = '';
+    contractors.forEach((c, index) => {
+      const card = document.createElement('div');
+      card.className = 'visiting-card';
+      card.innerHTML = `
+        <h3>${c.name}</h3>
+        <p><strong>Phone:</strong> ${c.phone}</p>
+        <p><strong>Email:</strong> ${c.email}</p>
+        <p><strong>Past Projects:</strong> ${c.pastProjects || 'N/A'}</p>
+        <button onclick="deleteContractor(${index})" style="background:#d63031;color:white;border:none;padding:6px 12px;border-radius:6px;margin-top:8px;cursor:pointer;">Delete</button>
+      `;
+      contractorList.appendChild(card);
+    });
+  }
+
+  function deleteContractor(index) {
+    contractors.splice(index, 1);
+    saveToLocalStorage();
+    renderContractors();
+  }
+
+  // Hamburger menu toggle
+  document.getElementById('hamburger').addEventListener('click', () => {
+    document.getElementById('navLinks').classList.toggle('show');
+  });
+
+  // Initial load
+  renderContractors();
+</script>
+</body>
+</html>

@@ -1,29 +1,102 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Budget | Renovation Tracker</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
   <style>
-    /* Core Reset & Layout */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    html,
     body {
-      height: 100%;
+      font-family: 'Poppins', sans-serif;
+      background: #f5f5f5;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
     }
 
-    body {
-      min-height: 100vh;
+       nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background-color: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #00b894;
+    }
+
+    .brand .logo-img {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-right: 0.6rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 25px;
+    }
+
+    .nav-links a {
+      color: #00b894;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: #007bff;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+
+    .hamburger div {
+      width: 25px;
+      height: 3px;
+      background-color: #00b894;
+      margin: 4px 0;
+      transition: 0.4s;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background-color: white;
+        position: absolute;
+        top: 70px;
+        left: 0;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+      }
+
+      .nav-links.show {
+        display: flex;
+      }
+
+      .hamburger {
+        display: flex;
+      }
     }
 
     main {
@@ -33,56 +106,12 @@
       padding: 0 1rem;
     }
 
-    /* Navbar (from your template) */
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #2c3e50;
-      color: #fff;
-      padding: 1rem 2rem;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
+    h1 {
+      margin-bottom: 1rem;
+      color: #2c3e50;
+      text-align: center;
     }
 
-    .nav-toggle {
-      display: none;
-    }
-
-    .nav-menu a {
-      color: #fff;
-      text-decoration: none;
-      padding: .5rem 1rem;
-      border-radius: 4px;
-    }
-
-    .nav-menu a:hover,
-    .nav-menu a.active {
-      background: #34495e;
-    }
-
-    @media(max-width:768px) {
-      .nav-toggle {
-        display: block;
-      }
-
-      .nav-menu {
-        display: none;
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 60px;
-        background: #2c3e50;
-        flex-direction: column;
-      }
-
-      .nav-menu.active {
-        display: flex;
-      }
-    }
-
-    /* Summary Cards */
     .summary {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -99,9 +128,8 @@
     }
 
     .card h3 {
-      font-size: 1rem;
-      color: #333;
       margin-bottom: .5rem;
+      color: #333;
     }
 
     .card p {
@@ -110,7 +138,6 @@
       color: #2c3e50;
     }
 
-    /* Input Forms */
     .forms {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -130,33 +157,32 @@
       margin-bottom: .5rem;
     }
 
-    .panel input {
+    .panel input,
+    .panel button {
       width: 100%;
       padding: .6rem;
-      margin-bottom: 1rem;
-      border: 1px solid #ccc;
+      margin-bottom: .8rem;
       border-radius: 4px;
+      border: 1px solid #ccc;
     }
 
     .panel button {
-      background: #2c3e50;
+      background: #00b894;
       color: #fff;
-      padding: .6rem 1rem;
-      border: none;
-      border-radius: 4px;
       cursor: pointer;
+      font-weight: bold;
     }
 
     .panel button:hover {
-      background: #1e2a38;
+      background: #009875;
     }
 
-    /* Expense History */
     .history {
       background: #fff;
       padding: 1rem;
       border-radius: 8px;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      overflow-x: auto;
     }
 
     .history table {
@@ -172,96 +198,89 @@
     }
 
     .history th {
-      background: #2c3e50;
+      background: #00b894;
       color: #fff;
     }
 
-    .history td button {
-      background: #d32f2f;
-      color: #fff;
+    tr.income-row {
+      background: #e8f6e4;
+    }
+
+    tr.expense-row {
+      background: #fdecea;
+    }
+
+    .btn-icon {
+      background: none;
       border: none;
-      padding: .3rem .6rem;
-      border-radius: 4px;
       cursor: pointer;
+      font-size: 1.1rem;
+      margin: 0 5px;
+      padding: 5px;
+      transition: transform 0.2s ease, color 0.3s;
     }
 
-    .history td button:hover {
-      background: #b02729;
+    .btn-icon.edit i {
+      color: #2980b9;
     }
 
-    /* Footer */
-    .footer {
-      background: #2c3e50;
+    .btn-icon.delete i {
+      color: #c0392b;
+    }
+
+    .btn-icon:hover {
+      transform: scale(1.2);
+    }
+    footer {
+      background-color: #00b894;
       color: #fff;
-      padding: 2rem;
-      flex-shrink: 0;
-    }
-
-    .footer-content {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 2rem;
-    }
-
-    .footer-section {
-      flex: 1 1 200px;
-    }
-
-    .footer-section h3 {
-      margin-bottom: 0.5rem;
-    }
-
-    .footer-section a {
-      color: #ecf0f1;
-      text-decoration: none;
-    }
-
-    .footer-section a:hover {
-      text-decoration: underline;
-    }
-
-    .social-icons a {
-      font-size: 1.2rem;
-      margin-right: 0.8rem;
-    }
-
-    .footer-bottom {
-      margin-top: 1.5rem;
+      padding: 20px;
       text-align: center;
-      font-size: 0.9rem;
-      border-top: 1px solid #7f8c8d;
-      padding-top: 1rem;
+      font-size: 0.95rem;
+      margin-top: auto;
     }
 
-    @media (max-width: 600px) {
-      .footer-content {
+    @media (max-width: 768px) {
+      .nav-menu {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: flex-end;
+      }
+
+      .forms {
+        grid-template-columns: 1fr;
       }
     }
   </style>
 </head>
 
 <body>
+  <!-- ✅ Navbar -->
+  <nav>
+    <div class="brand">
+      <img src="https://i.pinimg.com/736x/74/82/b0/7482b05190c9d18b603d4e2e43553321.jpg" alt="Logo" class="logo-img" />
+      Renovation Tracker
+    </div>
 
-  <header class="navbar">
-    <div class="brand">Renovation Tracker</div>
-    <button class="nav-toggle">☰</button>
-    <nav class="nav-menu">
-      <a href="index.html">Dashboard</a>
-      <a href="projects.html">Projects</a>
+    <div class="hamburger" id="hamburger">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="project.html">Projects</a>
       <a href="tasks.html">Tasks</a>
-      <a href="budget.html" class="active">Budget</a>
+      <a href="budget.html">Budget</a>
       <a href="inventory.html">Inventory</a>
-      <a href="contractors.html">Contractors</a>
       <a href="inspiration.html">Inspiration</a>
-      <a href="settings.html">Settings</a>
-    </nav>
-  </header>
+      <a href="contractor.html">Contractor Details</a>
+    </div>
+  </nav>
 
   <main>
-    <h1>Budget Tracker</h1>
+    <h1>Budget Overview</h1>
 
     <section class="summary">
       <div class="card">
@@ -273,110 +292,147 @@
         <p id="expenseAmount">₹0</p>
       </div>
       <div class="card">
-        <h3>Remaining Balance</h3>
+        <h3>Balance</h3>
         <p id="balanceAmount">₹0</p>
       </div>
     </section>
 
     <section class="forms">
       <div class="panel">
-        <h4>Add Income</h4>
+        <h4 id="incFormTitle">Add Income</h4>
         <form id="incomeForm">
           <input type="text" id="incDesc" placeholder="Description" required />
-          <input type="number" id="incAmt" placeholder="₹0.00" required min="0" step="0.01" />
-          <button type="submit">Add Income</button>
+          <input type="number" id="incAmt" placeholder="₹0.00" required step="0.01" />
+          <button type="submit" id="incSubmitBtn">Add Income</button>
         </form>
       </div>
+
       <div class="panel">
-        <h4>Add Expense</h4>
+        <h4 id="expFormTitle">Add Expense</h4>
         <form id="expenseForm">
           <input type="text" id="expDesc" placeholder="Description" required />
-          <input type="number" id="expAmt" placeholder="₹0.00" required min="0" step="0.01" />
-          <button type="submit">Add Expense</button>
+          <input type="number" id="expAmt" placeholder="₹0.00" required step="0.01" />
+          <button type="submit" id="expSubmitBtn">Add Expense</button>
         </form>
       </div>
     </section>
 
     <section class="history">
-      <h2>Expense History</h2>
+      <h2>Transaction History</h2>
       <table>
         <thead>
           <tr>
             <th>Description</th>
             <th>Amount</th>
-            <th>Action</th>
+            <th>Actions</th>
           </tr>
         </thead>
-        <tbody id="expenseTable"></tbody>
+        <tbody id="transTable"></tbody>
       </table>
     </section>
   </main>
 
-  <footer class="footer">
-    <div class="footer-content">
-      <div class="footer-section about">
-        <h3>About Renovation Tracker</h3>
-        <p>Manage renovation budgets, materials & contacts in one place.</p>
-      </div>
-      <div class="footer-section contact">
-        <h3>Contact Us</h3>
-        <p>Singānallūr, Tamil Nadu<br>+91 98765 43210<br><a
-            href="mailto:support@renovationtracker.app">support@renovationtracker.app</a></p>
-      </div>
-      <div class="footer-section social">
-        <h3>Follow Us</h3>
-        <p>📘   🐦   📷</p>
-      </div>
-    </div>
-    <div class="footer-bottom">© 2025 Renovation Tracker. All rights reserved.</div>
+  <footer>
+    &copy; 2025 Renovation Tracker | Designed to Inspire Your Perfect Home ✨
   </footer>
 
   <script>
     const incForm = document.getElementById('incomeForm');
     const expForm = document.getElementById('expenseForm');
-    const incAmtEl = document.getElementById('incomeAmount');
-    const expAmtEl = document.getElementById('expenseAmount');
-    const balAmtEl = document.getElementById('balanceAmount');
-    const expTable = document.getElementById('expenseTable');
+    const incomeEl = document.getElementById('incomeAmount');
+    const expenseEl = document.getElementById('expenseAmount');
+    const balanceEl = document.getElementById('balanceAmount');
+    const table = document.getElementById('transTable');
+    let entries = JSON.parse(localStorage.getItem('budgetEntries')) || [];
+    let editingId = null;
 
-    let totalIncome = 0, totalExpenses = 0;
-
-    function updateSummary() {
-      incAmtEl.textContent = `₹${totalIncome.toFixed(2)}`;
-      expAmtEl.textContent = `₹${totalExpenses.toFixed(2)}`;
-      balAmtEl.textContent = `₹${(totalIncome - totalExpenses).toFixed(2)}`;
+    function save() {
+      localStorage.setItem('budgetEntries', JSON.stringify(entries));
     }
 
-    incForm.addEventListener('submit', e => {
-      e.preventDefault();
-      totalIncome += parseFloat(document.getElementById('incAmt').value);
-      updateSummary();
-      incForm.reset();
-    });
-
-    expForm.addEventListener('submit', e => {
-      e.preventDefault();
-      const desc = document.getElementById('expDesc').value;
-      const amt = parseFloat(document.getElementById('expAmt').value);
-      totalExpenses += amt;
-      updateSummary();
-      const row = document.createElement('tr');
-      row.innerHTML = `<td>${desc}</td><td>₹${amt.toFixed(2)}</td><td><button onclick="deleteExpense(this, ${amt})">Delete</button></td>`;
-      expTable.appendChild(row);
-      expForm.reset();
-    });
-
-    function deleteExpense(btn, amt) {
-      totalExpenses -= amt;
-      updateSummary();
-      btn.closest('tr').remove();
+    function recalc() {
+      const income = entries.filter(e => e.type === 'income').reduce((s, e) => s + e.amount, 0);
+      const expense = entries.filter(e => e.type === 'expense').reduce((s, e) => s + e.amount, 0);
+      incomeEl.textContent = `₹${income.toFixed(2)}`;
+      expenseEl.textContent = `₹${expense.toFixed(2)}`;
+      balanceEl.textContent = `₹${(income - expense).toFixed(2)}`;
     }
 
-    // Navbar toggle for mobile
-    document.querySelector('.nav-toggle')?.addEventListener('click', () => {
-      document.querySelector('.nav-menu').classList.toggle('active');
+    function refreshTable() {
+      table.innerHTML = '';
+      entries.forEach(entry => {
+        const tr = document.createElement('tr');
+        tr.className = entry.type === 'income' ? 'income-row' : 'expense-row';
+        tr.innerHTML = `
+          <td>${entry.desc}</td>
+          <td>₹${entry.amount.toFixed(2)}</td>
+          <td>
+            <button class="btn-icon edit" title="Edit"><i class="fas fa-pen"></i></button>
+            <button class="btn-icon delete" title="Delete"><i class="fas fa-trash"></i></button>
+          </td>`;
+        tr.querySelector('.delete').onclick = () => {
+          entries = entries.filter(e => e.id !== entry.id);
+          save(); refreshTable(); recalc();
+        };
+        tr.querySelector('.edit').onclick = () => {
+          editingId = entry.id;
+          if (entry.type === 'income') {
+            document.getElementById('incDesc').value = entry.desc;
+            document.getElementById('incAmt').value = entry.amount;
+            document.getElementById('incFormTitle').textContent = 'Edit Income';
+            document.getElementById('incSubmitBtn').textContent = 'Update Income';
+          } else {
+            document.getElementById('expDesc').value = entry.desc;
+            document.getElementById('expAmt').value = entry.amount;
+            document.getElementById('expFormTitle').textContent = 'Edit Expense';
+            document.getElementById('expSubmitBtn').textContent = 'Update Expense';
+          }
+        };
+        table.appendChild(tr);
+      });
+    }
+
+    incForm.onsubmit = e => {
+      e.preventDefault();
+      const desc = document.getElementById('incDesc').value.trim();
+      const amount = parseFloat(document.getElementById('incAmt').value);
+      if (editingId) {
+        const entry = entries.find(e => e.id === editingId);
+        entry.desc = desc;
+        entry.amount = amount;
+        editingId = null;
+        document.getElementById('incFormTitle').textContent = 'Add Income';
+        document.getElementById('incSubmitBtn').textContent = 'Add Income';
+      } else {
+        entries.push({ id: Date.now(), desc, amount, type: 'income' });
+      }
+      save(); refreshTable(); recalc(); incForm.reset();
+    };
+
+    expForm.onsubmit = e => {
+      e.preventDefault();
+      const desc = document.getElementById('expDesc').value.trim();
+      const amount = parseFloat(document.getElementById('expAmt').value);
+      if (editingId) {
+        const entry = entries.find(e => e.id === editingId);
+        entry.desc = desc;
+        entry.amount = amount;
+        editingId = null;
+        document.getElementById('expFormTitle').textContent = 'Add Expense';
+        document.getElementById('expSubmitBtn').textContent = 'Add Expense';
+      } else {
+        entries.push({ id: Date.now(), desc, amount, type: 'expense' });
+      }
+      save(); refreshTable(); recalc(); expForm.reset();
+    };
+  // Hamburger menu toggle
+  document.getElementById('hamburger').addEventListener('click', () => {
+    document.getElementById('navLinks').classList.toggle('show');
+  });
+    window.addEventListener('DOMContentLoaded', () => {
+      refreshTable();
+      recalc();
     });
   </script>
 </body>
-
 </html>

@@ -2,149 +2,468 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>Renovation Tracker – Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Renovation Tracker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
   <style>
-    /* Reset and layout */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { height: 100%; font-family: Arial, sans-serif; background: #f5f5f5; display: flex; flex-direction: column; }
-    body { min-height: 100vh; }
-
-    /* Navbar */
-    .navbar { display: flex; align-items: center; justify-content: space-between; background: #2c3e50; color: #fff; padding: 1rem 2rem; position: sticky; top: 0; z-index: 1000; }
-    .brand { font-size: 1.5rem; font-weight: bold; }
-    .nav-toggle { display: none; font-size: 1.5rem; background: none; border: none; color: #fff; cursor: pointer; }
-    .nav-menu { display: flex; gap: 1rem; }
-    .nav-menu a { color: #fff; text-decoration: none; padding: 0.5rem; transition: background 0.3s ease; }
-    .nav-menu a:hover, .nav-menu a.active { background: #34495e; border-radius: 5px; }
-
-    @media (max-width: 768px) {
-      .nav-toggle { display: block; }
-      .nav-menu { display: none; flex-direction: column; width: 100%; background: #2c3e50; position: absolute; top: 70px; left: 0; }
-      .nav-menu.active { display: flex; }
-      .nav-menu a { padding: 1rem; border-top: 1px solid #34495e; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    /* Main content */
-    main { flex: 1; padding: 2rem; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f9fbff;
+      color: #2c3e50;
+      line-height: 1.6;
+    }
 
-    /* Stats Panel */
-    .stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
-    .stat-card { background: #fff; padding: 1rem 1.5rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-    .stat-card h3 { margin-bottom: 0.5rem; font-size: 1rem; color: #555; }
-    .stat-card .number { font-size: 1.8rem; font-weight: bold; color: #2c3e50; }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background-color: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
 
-    /* Projects Overview */
-    .projects-section, .tasks-section { background: #fff; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 2rem; }
-    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-    .section-header h2 { font-size: 1.2rem; color: #333; }
-    .project-status span { margin-left: 1rem; font-size: 0.9rem; color: #666; }
-    .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
-    .project-box { background: #f9f9f9; padding: 1rem; border-radius: 6px; }
-    .project-title { font-weight: 600; margin-bottom: 0.5rem; }
-    .progress-bar { background: #e0e0e0; border-radius: 4px; overflow: hidden; height: 8px; margin-bottom: 0.5rem; }
-    .progress { background: #4CAF50; height: 100%; }
+    .brand {
+      display: flex;
+      align-items: center;
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #00b894;
+    }
 
-    /* Tasks List */
-    .tasks-list { list-style: none; }
-    .tasks-list li { padding: 0.5rem 0; display: flex; align-items: center; }
-    .tasks-list li + li { border-top: 1px solid #eee; }
-    .tasks-list input[type="checkbox"] { margin-right: 0.75rem; }
-    .view-btn { background: #2c3e50; color: #fff; border: none; padding: 0.4rem 0.9rem; border-radius: 4px; cursor: pointer; }
-    .view-btn:hover { background: #1e2a38; }
+    .brand .logo-img {
+      width: 55px;
+      height: 55px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-right: 0.6rem;
+    }
 
-    /* Footer */
-    .footer { background: #2c3e50; color: #fff; padding: 2rem; flex-shrink: 0; }
-    .footer-content { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2rem; }
-    .footer-section { flex: 1 1 200px; }
-    .footer-section h3 { margin-bottom: 0.5rem; }
-    .footer-section a { color: #ecf0f1; text-decoration: none; }
-    .footer-section a:hover { text-decoration: underline; }
-    .social-icons a { font-size: 1.2rem; margin-right: 0.8rem; }
-    .footer-bottom { margin-top: 1.5rem; text-align: center; font-size: 0.9rem; border-top: 1px solid #7f8c8d; padding-top: 1rem; }
+    .auth-buttons button {
+      margin-left: 1rem;
+      padding: 0.6rem 1rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
 
-    @media (max-width: 600px) {
-      .footer-content { flex-direction: column; align-items: flex-start; }
+    .auth-buttons .primary {
+      background-color: #00b894;
+      color: white;
+    }
+
+    .auth-buttons .primary:hover {
+      background-color: #019170;
+      transform: scale(1.05);
+    }
+
+    .auth-buttons .outline {
+      background-color: transparent;
+      border: 2px solid #00b894;
+      color: #00b894;
+    }
+
+    .auth-buttons .outline:hover {
+      background-color: #00b894;
+      color: white;
+      transform: scale(1.05);
+    }
+
+    .hero {
+      text-align: center;
+      padding: 6rem 2rem 4rem;
+      background: linear-gradient(to right, #e0f7f4, #f0fcfa);
+      animation: fadeIn 1.5s ease-in;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      color: #555;
+    }
+
+    .cta-button {
+      padding: 1rem 2rem;
+      font-size: 1rem;
+      font-weight: bold;
+      background-color: #00b894;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .cta-button:hover {
+      background-color: #019170;
+      transform: scale(1.05);
+    }
+
+    .steps {
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+
+    .steps h2 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .step-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .step {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: fadeUp 0.6s ease-in-out both;
+    }
+
+    .step:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    }
+
+    .step h3 {
+      font-size: 1.2rem;
+      color: #00b894;
+      margin-bottom: 0.5rem;
+    }
+
+    .feature-split {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 4rem 2rem;
+      gap: 3rem;
+      flex-wrap: wrap;
+      background-color: #f9fbff;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .feature-split.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .feature-split.reverse {
+      flex-direction: row-reverse;
+    }
+
+    .feature-split .text-side {
+      flex: 1 1 400px;
+      max-width: 500px;
+    }
+
+    .feature-split .text-side h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: #2c3e50;
+    }
+
+    .feature-split .text-side p {
+      font-size: 1rem;
+      color: #555;
+      margin-bottom: 1.5rem;
+    }
+
+    .feature-split .text-side .feature-btn {
+      padding: 0.8rem 1.6rem;
+      background-color: #00b894;
+      color: white;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .feature-split .text-side .feature-btn:hover {
+      background-color: #019170;
+      transform: scale(1.05);
+    }
+
+    .feature-split .image-side {
+      flex: 1 1 400px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .feature-split .image-side img {
+      max-width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .testimonial {
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+
+    .testimonial-box {
+      max-width: 500px;
+      margin: auto;
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 12px 20px rgba(0, 0, 0, 0.08);
+      text-align: left;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .testimonial-box .user-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .testimonial-box .avatar {
+      width: 48px;
+      height: 48px;
+      margin-right: 1rem;
+      border-radius: 50%;
+    }
+
+    .testimonial-box .user-name {
+      font-weight: 600;
+    }
+
+    .testimonial-box .user-title {
+      font-size: 0.85rem;
+      color: #777;
+    }
+
+    .testimonial-text {
+      margin: 1rem 0;
+      font-size: 0.95rem;
+      color: #333;
+    }
+
+    .footer {
+      background: #2c3e50;
+      color: white;
+      text-align: center;
+      padding: 3rem 2rem;
+    }
+
+    .footer a {
+      color: #00f2fe;
+      margin: 0 0.5rem;
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2rem;
+      }
+
+      .hero p {
+        font-size: 1rem;
+      }
+
+      .feature-split,
+      .feature-split.reverse {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   </style>
 </head>
 <body>
-  <header class="navbar">
-    <div class="brand">Renovation Tracker</div>
-    <button class="nav-toggle" aria-label="Toggle navigation">☰</button>
-    <nav class="nav-menu">
-      <a href="index.html" class="active">Dashboard</a>
-      <a href="projects.html">Projects</a>
-      <a href="tasks.html">Tasks</a>
-      <a href="budget.html">Budget</a>
-      <a href="inventory.html">Inventory</a>
-      <a href="contractors.html">Contractors</a>
-      <a href="inspiration.html">Inspiration</a>
-      <a href="settings.html">Settings</a>
-    </nav>
+  <header>
+    <div class="brand">
+      <img src="https://i.pinimg.com/736x/74/82/b0/7482b05190c9d18b603d4e2e43553321.jpg" alt="Renovation Tracker Logo" class="logo-img" />
+      Renovation Tracker
+    </div>
+    <div class="auth-buttons">
+      <span id="welcomeMsg" style="margin-right: 1rem; font-weight: 600; color: #00b894;"></span>
+      <button class="outline" onclick="window.location.href='login.html'" id="loginBtn">Login</button>
+      <button class="primary" onclick="window.location.href='signup.html'" id="signupBtn">Sign Up</button>
+      <button class="primary" onclick="logout()" id="logoutBtn" style="display:none;">Logout</button>
+    </div>
   </header>
 
-  <main>
-    <!-- Stats cards -->
-    <section class="stats">
-      <div class="stat-card"><h3>Ongoing Projects</h3><p class="number">5</p></div>
-      <div class="stat-card"><h3>Upcoming Tasks</h3><p class="number">12</p></div>
-      <div class="stat-card"><h3>Budget Used</h3><p class="number">₹75,000/₹1,00,000</p></div>
-      <div class="stat-card"><h3>Materials Purchased</h3><p class="number">32 items</p></div>
-    </section>
+  <section class="hero">
+    <h1>Simple & Powerful Renovation Tracker</h1>
+    <p>Organize your renovation projects, track progress, and manage materials with ease.</p>
+    <button class="cta-button" id="startBtn" onclick="handleProtectedRedirect('projects.html')">Start Your Project</button>
+  </section>
 
-    <!-- Projects overview -->
-    <section class="projects-section">
-      <div class="section-header">
-        <h2>Projects Overview</h2>
-        <div class="project-status"><span>3 In Progress</span><span>2 Upcoming</span></div>
-      </div>
-      <div class="projects-grid">
-        <div class="project-box">
-          <div class="project-title">Kitchen Remodel</div>
-          <div class="progress-bar"><div class="progress" style="width: 65%"></div></div>
-          <p>65% complete</p>
-        </div>
-        <div class="project-box">
-          <div class="project-title">Bathroom Update</div>
-          <div class="progress-bar"><div class="progress" style="width: 40%"></div></div>
-          <p>40% complete</p>
-        </div>
-        <div class="project-box">
-          <div class="project-title">Garden Landscaping</div>
-          <div class="progress-bar"><div class="progress" style="width: 20%"></div></div>
-          <p>20% complete</p>
-        </div>
-      </div>
-    </section>
+  <section class="steps">
+    <h2>Get Started in 4 Easy Steps</h2>
+    <div class="step-grid">
+      <div class="step"><h3>📋 Create Project</h3><p>Start by creating rooms or renovation projects in just one click.</p></div>
+      <div class="step"><h3>🧱 Add Tasks</h3><p>Define work phases, assign contractors, and set budgets.</p></div>
+      <div class="step"><h3>📦 Track Materials</h3><p>Monitor your material stock, order status, and delivery timelines.</p></div>
+      <div class="step"><h3>📊 Monitor Progress</h3><p>Visual dashboards help you stay updated on every detail.</p></div>
+    </div>
+  </section>
 
-    <!-- Today's tasks -->
-    <section class="tasks-section">
-      <div class="section-header">
-        <h2>My Tasks Today</h2>
-        <button class="view-btn">View All Tasks</button>
+  <!-- Feature Sections -->
+  <section class="feature-split">
+    <div class="text-side">
+      <h2>📊 Dashboard Overview</h2>
+      <p>View project progress, budgets, and timelines from a centralized dashboard.</p>
+      <button class="feature-btn" onclick="handleProtectedRedirect('dashboard.html')">Go to Dashboard</button>
+    </div>
+    <div class="image-side">
+      <img src="https://www.figma.com/community/resource/b9a72223-722d-44fa-a226-f220d29392f9/thumbnail" alt="Dashboard Preview" />
+    </div>
+  </section>
+
+  <section class="feature-split reverse">
+    <div class="text-side">
+      <h2>📁 Manage Projects</h2>
+      <p>Organize your home renovation projects by rooms, types, and progress.</p>
+      <button class="feature-btn" onclick="handleProtectedRedirect('projects.html')">View Projects</button>
+    </div>
+    <div class="image-side">
+      <img src="https://d33v4339jhl8k0.cloudfront.net/docs/assets/5b967fbe0428631d7a8ae591/images/5b991bc82c7d3a03f89eb3ad/file-H1OT13xm5y.png" alt="Projects Management" />
+    </div>
+  </section>
+
+  <section class="feature-split">
+    <div class="text-side">
+      <h2>✅ Task Manager</h2>
+      <p>Assign tasks, set deadlines, and stay on track with your renovation.</p>
+      <button class="feature-btn" onclick="handleProtectedRedirect('tasks.html')">Manage Tasks</button>
+    </div>
+    <div class="image-side">
+      <img src="https://cdn.sanity.io/images/b5fgx0yb/production/66445a8ba71853470f2a3c15a5ed4cfe7bca85a0-541x261.webp?w=1400&auto=format" alt="Tasks Dashboard" />
+    </div>
+  </section>
+
+  <section class="feature-split reverse">
+    <div class="text-side">
+      <h2>🎨 Inspiration Gallery</h2>
+      <p>Explore stylish designs and home ideas categorized by room and budget.</p>
+      <button class="feature-btn" onclick="handleProtectedRedirect('inspiration.html')">Explore Gallery</button>
+    </div>
+    <div class="image-side">
+      <img src="https://www.contemporist.com/wp-content/uploads/2016/10/renovations_241016_01-800x500.jpg" alt="Inspiration Preview" />
+    </div>
+  </section>
+
+  <section class="feature-split">
+    <div class="text-side">
+      <h2>📦 Inventory Tracking</h2>
+      <p>Track material availability, delivery, and auto restock alerts.</p>
+      <button class="feature-btn" onclick="handleProtectedRedirect('inventory.html')">Check Inventory</button>
+    </div>
+    <div class="image-side">
+      <img src="https://images.ctfassets.net/n3rcstr5ldte/6BfJ5CJPbiFIIWg6bOKk0V/20b9a494e23575724004a59d0752682e/Inventory01.jpg" alt="Inventory System" />
+    </div>
+  </section>
+
+  <section class="testimonial">
+    <h2>What Our Users Say</h2>
+    <div class="testimonial-box">
+      <div class="user-info">
+        <img src="https://cdn4.iconfinder.com/data/icons/social-media-logos-6/512/112-gmail_email_mail-512.png" class="avatar" alt="User">
+        <div>
+          <div class="user-name">Peter Parker</div>
+          <div class="user-title">Teacher</div>
+        </div>
       </div>
-      <ul class="tasks-list">
-        <li><label><input type="checkbox"> Order countertop materials</label></li>
-        <li><label><input type="checkbox"> Approve contractor quote</label></li>
-        <li><label><input type="checkbox"> Schedule plumber visit</label></li>
-      </ul>
-    </section>
-  </main>
+      <p class="testimonial-text">Renovation Tracker has made my planning and budgeting process so easy. It’s incredibly helpful and user-friendly!</p>
+    </div>
+  </section>
 
   <footer class="footer">
-    <div class="footer-content">
-      <div class="footer-section about"><h3>About Renovation Tracker</h3><p>Organize renovation projects, budgets & contacts in one intuitive app.</p></div>
-      <div class="footer-section contact"><h3>Contact Us</h3><p><strong>Address:</strong> 123 Renovation Ave, Singānallūr, Tamil Nadu</p><p><strong>Phone:</strong> +91 98765 43210</p><p><strong>Email:</strong> <a href="mailto:support@renivationtracker.app">support@renivationtracker.app</a></p></div>
-      <div class="footer-section social"><h3>Follow Us</h3><div class="social-icons"><a href="#" aria-label="Facebook">📘</a><a href="#" aria-label="Twitter">🐦</a><a href="#" aria-label="Instagram">📷</a></div></div>
+    <div>© 2025 Renovation Tracker. Designed for dreamers & doers.</div>
+    <div>
+      <a href="#">Privacy Policy</a> |
+      <a href="#">Terms of Service</a> |
+      <a href="#">Contact Us</a>
     </div>
-    <div class="footer-bottom">© 2025 Home Improvement Tracker. All rights reserved.</div>
   </footer>
 
   <script>
-    document.querySelector('.nav-toggle').addEventListener('click', () => {
-      document.querySelector('.nav-menu').classList.toggle('active');
+    function updateUI() {
+      const user = JSON.parse(localStorage.getItem("currentUser"));
+      const isLoggedIn = !!user;
+      document.getElementById("welcomeMsg").innerText = isLoggedIn ? `Welcome, ${user.name}` : "";
+      document.getElementById("logoutBtn").style.display = isLoggedIn ? "inline-block" : "none";
+      document.getElementById("loginBtn").style.display = isLoggedIn ? "none" : "inline-block";
+      document.getElementById("signupBtn").style.display = isLoggedIn ? "none" : "inline-block";
+    }
+
+    function logout() {
+      localStorage.removeItem("currentUser");
+      alert("You have been logged out.");
+      updateUI();
+    }
+
+    function handleProtectedRedirect(targetPage) {
+      const user = JSON.parse(localStorage.getItem("currentUser"));
+      if (user) {
+        window.location.href = targetPage;
+      } else {
+        alert("You must be logged in to access this feature.");
+      }
+    }
+
+    // Scroll reveal animation
+    const revealSections = document.querySelectorAll(".feature-split");
+    window.addEventListener("scroll", () => {
+      revealSections.forEach(section => {
+        const top = section.getBoundingClientRect().top;
+        if (top < window.innerHeight - 100) {
+          section.classList.add("show");
+        }
+      });
     });
+
+    updateUI();
   </script>
 </body>
 </html>
